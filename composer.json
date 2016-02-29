@@ -1,0 +1,20 @@
+{
+	"description": "A sample application with the CodeIgniter on the HEROKU",
+	"name": "codeigniter/framework",
+	"type": "project",
+	"homepage": "https://heroku-postgres-a7d1e634.herokuapp.com/",
+	"license": "MIT",
+	"support": {
+		"forum": "http://forum.codeigniter.com/",
+		"wiki": "https://github.com/bcit-ci/CodeIgniter/wiki",
+		"irc": "irc://irc.freenode.net/codeigniter",
+		"source": "https://github.com/bcit-ci/CodeIgniter"
+	},
+	"require": {
+		"php": "^5.5.12",
+		"ext-mcrypt": "*"
+	},
+	"require-dev": {
+		"mikey179/vfsStream": "1.1.*"
+	}
+}

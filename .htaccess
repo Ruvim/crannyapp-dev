@@ -1,0 +1,15 @@
+<IfModule mod_rewrite.c>
+RewriteEngine on
+RewriteCond $1 !^(index\.php|resources|robots\.txt)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php/$1 [L,QSA] 
+# Protect application and system files from being viewed when the index.php is missing
+RewriteCond $1 ^(application|system|assests|private|logs)
+# disable directory browsing
+#Options All -Indexes
+# prevent folder listing
+#IndexIgnore *
+</IfModule>
+
+
