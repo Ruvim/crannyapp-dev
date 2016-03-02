@@ -25,8 +25,9 @@ class AdminUserModel extends CI_Model
 	function validate($username, $password)
 	{
 		$this->db->select('*');
-		$this->db->where('(email="'.$username.'" OR user_name="'.$username.'")', NULL);
-		//$this->db->where('email', $username);
+		//$this->db->where('(email="'.$username.'" OR user_name="'.$username.'")', NULL);
+		$this->db->where('email', $username);
+		$this->db->or_where('user_name', $username);
         $this->db->where('password', $password);
 		$query = $this->db->get('adminusers');		
 		//echo $sql = $this->db->last_query();		
