@@ -42,7 +42,7 @@ class Imagemodel extends CI_Model {
 		}
 				
 		if($srchisActive!='') $this->db->where('g.isActive', $srchisActive);  /// For Active or Inactive*/
-		$this->db->group_by('g.image_id');
+		//$this->db->group_by('g.image_id');
 		//$this->db->order_by($order, $order_type);  /// For Maintain Sorting Order
 		
 		$query = $this->db->get();
@@ -78,7 +78,7 @@ class Imagemodel extends CI_Model {
 		}
 		
 		if($srchisActive!='') $this->db->where('g.isActive', $srchisActive);  /// For Active or Inactive		*/
-		$this->db->group_by('g.image_id');		
+		//$this->db->group_by('g.image_id');		
 		//$this->db->order_by($order, $order_type);  /// For Maintain Sorting Order
 		        
 		if($limit_start && $limit_end)
