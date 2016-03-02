@@ -28,7 +28,7 @@ if($_SERVER['HTTP_HOST']=='localhost')
 else
 {
 	$config['base_url'] = 'https://mycrannyapp.herokuapp.com/';
-	$config['base_path'] = '';
+	$config['base_path'] = $_SERVER['DOCUMENT_ROOT'].'/';
 	$config['admin_url'] = 'https://mycrannyapp.herokuapp.com/admin';
 	$config['image_url'] = 'https://mycrannyapp.herokuapp.com/assets/uploads';
 }
