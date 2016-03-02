@@ -17,18 +17,18 @@ class Adminuser extends CI_Controller
 	{
 		$search_string = $this->input->post('search_string');
 		////// Get Ascending Or Descending order From Ajax /////////
-		$order = $this->input->post('fieldName');//$this->input->post('orderType'); 
-		$order_type = $this->input->post('orderType');//$this->input->post('orderType');  
+		//$order = $this->input->post('fieldName');//$this->input->post('orderType'); 
+		//$order_type = $this->input->post('orderType');//$this->input->post('orderType');  
 		///////// For Check Publish Data or Not with Ajax /////
-		$srchisActive = $this->input->post('srchisActive');
+		//$srchisActive = $this->input->post('srchisActive');
 			
-		$startdate = ($this->input->post('startdate')!='') ? date("Y-m-d",strtotime($this->input->post('startdate'))) : '';
-		$enddate = ($this->input->post('enddate')!='') ? date("Y-m-d",strtotime($this->input->post('enddate'))) : '';
+		//$startdate = ($this->input->post('startdate')!='') ? date("Y-m-d",strtotime($this->input->post('startdate'))) : '';
+		//$enddate = ($this->input->post('enddate')!='') ? date("Y-m-d",strtotime($this->input->post('enddate'))) : '';
 		
-		$order = ($order!='') ? $order : 'adminuser_id';
-		$order_type = ($order_type!='') ? $order_type : 'desc';
+		//$order = ($order!='') ? $order : 'adminuser_id';
+		//$order_type = ($order_type!='') ? $order_type : 'desc';
 		$search_string = ($search_string!='') ? $search_string : '';
-		$srchisActive = ($srchisActive!='') ? $srchisActive : '';
+		//$srchisActive = ($srchisActive!='') ? $srchisActive : '';
 		
 		 // pagination settings
 		if($this->uri->segment(5)!='')
@@ -61,10 +61,12 @@ class Adminuser extends CI_Controller
 			$limit_end = 0;
 		} 
 		
-		$data['count_adminuser']= $this->adminusermodel->countAdminuser($srchisActive,$search_string, $order, $order_type, $startdate, $enddate);
+		//$data['count_adminuser']= $this->adminusermodel->countAdminuser($srchisActive,$search_string, $order, $order_type, $startdate, $enddate);
+		$data['count_adminuser']= $this->adminusermodel->countAdminuser($search_string);
 		$config['total_rows'] = $data['count_adminuser'];
 		
-		$data['adminuser'] = $this->adminusermodel->getAdminuser($srchisActive,$search_string, $order, $order_type, $config['per_page'], $limit_end, $startdate, $enddate);        
+		//$data['adminuser'] = $this->adminusermodel->getAdminuser($srchisActive,$search_string, $order, $order_type, $config['per_page'], $limit_end, $startdate, $enddate);
+		$data['adminuser'] = $this->adminusermodel->getAdminuser($search_string, $config['per_page'], $limit_end);		
 		$this->pagination->initialize($config); //// For Pagination		
 		//echo '<pre>';print_r($data['adminuser']); exit;
 		$data['mainContent'] = 'admin/adminuser/adminuserList';		

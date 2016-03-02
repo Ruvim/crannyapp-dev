@@ -38,18 +38,18 @@ class Image extends CI_Controller {
 	{
 		$search_string = $this->input->post('search_string');
 		////// Get Ascending Or Descending order From Ajax /////////
-		$order = $this->input->post('fieldName');//$this->input->post('orderType'); 
-		$order_type = $this->input->post('orderType');//$this->input->post('orderType');  
+		//$order = $this->input->post('fieldName');//$this->input->post('orderType'); 
+		//$order_type = $this->input->post('orderType');//$this->input->post('orderType');  
 		///////// For Check Publish Data or Not with Ajax /////
-		$srchisActive = $this->input->post('srchisActive');
+		//$srchisActive = $this->input->post('srchisActive');
 			
-		$startdate = ($this->input->post('startdate')!='') ? date("Y-m-d",strtotime($this->input->post('startdate'))) : '';
-		$enddate = ($this->input->post('enddate')!='') ? date("Y-m-d",strtotime($this->input->post('enddate'))) : '';
+		//$startdate = ($this->input->post('startdate')!='') ? date("Y-m-d",strtotime($this->input->post('startdate'))) : '';
+		//$enddate = ($this->input->post('enddate')!='') ? date("Y-m-d",strtotime($this->input->post('enddate'))) : '';
 		
-		$order = ($order!='') ? $order : 'g.image_id';
-		$order_type = ($order_type!='') ? $order_type : 'desc';
+		//$order = ($order!='') ? $order : 'g.image_id';
+		//$order_type = ($order_type!='') ? $order_type : 'desc';
 		$search_string = ($search_string!='') ? $search_string : '';
-		$srchisActive = ($srchisActive!='') ? $srchisActive : '';
+		//$srchisActive = ($srchisActive!='') ? $srchisActive : '';
 		
 		 // pagination settings
 		if($this->uri->segment(5)!='')
@@ -82,10 +82,12 @@ class Image extends CI_Controller {
 			$limit_end = 0;
 		} 
 		
-		$data['count_image']= $this->Imagemodel->countImage($srchisActive,$search_string, $order, $order_type, $startdate, $enddate);
+		//$data['count_image']= $this->Imagemodel->countImage($srchisActive,$search_string, $order, $order_type, $startdate, $enddate);
+		$data['count_image']= $this->Imagemodel->countImage($search_string);
 		$config['total_rows'] = $data['count_image'];
 		
-		$data['image'] = $this->Imagemodel->getImage($srchisActive,$search_string, $order, $order_type, $config['per_page'], $limit_end, $startdate, $enddate);        
+		//$data['image'] = $this->Imagemodel->getImage($srchisActive,$search_string, $order, $order_type, $config['per_page'], $limit_end, $startdate, $enddate);
+		$data['image'] = $this->Imagemodel->getImage($search_string, $config['per_page'], $limit_end);
 		$this->pagination->initialize($config); //// For Pagination		
 		//echo '<pre>';print_r($data['image']); exit;
 		$data['mainContent'] = 'admin/image/imageList';		

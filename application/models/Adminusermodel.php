@@ -181,7 +181,8 @@ class AdminUserModel extends CI_Model
 //////////////////////////////////////////////  ///////////////////////////////////////////////////
 	
 	// Get count of adminuser
-	function countAdminuser($srchisActive=null,$search_string=null, $order, $order_type)
+	//function countAdminuser($srchisActive=null,$search_string=null, $order, $order_type)
+	function countAdminuser($search_string=null)
 	{
 		$this->db->select('*');
 		$this->db->from('adminusers');
@@ -205,7 +206,8 @@ class AdminUserModel extends CI_Model
 	}
 	
 	// Get all authors data from db
-	function getAdminuser($srchisActive=null,$search_string=null, $order, $order_type, $limit_start=null, $limit_end=null)
+	//function getAdminuser($srchisActive=null,$search_string=null, $order, $order_type, $limit_start=null, $limit_end=null)
+	function getAdminuser($search_string=null, $limit_start=null, $limit_end=null)
 	{
 		$this->db->select('*');
 		$this->db->from('adminusers');

@@ -17,7 +17,8 @@ class Imagemodel extends CI_Model {
 	}
 	
 	// Get count image
-	function countImage($srchisActive=null,$search_string=null, $order, $order_type, $startdate, $enddate)
+	//function countImage($srchisActive=null,$search_string=null, $order, $order_type, $startdate, $enddate)
+	function countImage($search_string=null)
 	{		
 		$this->db->select('g.*, u.user_name');
 		$this->db->from('images as g');
@@ -50,7 +51,8 @@ class Imagemodel extends CI_Model {
 	}
 	
 	// Get all images data from db
-	function getImage($srchisActive=null,$search_string=null, $order, $order_type, $limit_start=null, $limit_end=null, $startdate, $enddate)
+	//function getImage($srchisActive=null,$search_string=null, $order, $order_type, $limit_start=null, $limit_end=null, $startdate, $enddate)
+	function getImage($search_string=null, $limit_start=null, $limit_end=null)
 	{
 		$imagedata = array();
 		$this->db->select('g.*, u.user_name');
