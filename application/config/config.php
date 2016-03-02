@@ -27,10 +27,10 @@ if($_SERVER['HTTP_HOST']=='localhost')
 }
 else
 {
-	$config['base_url'] = '';
+	$config['base_url'] = 'https://mycrannyapp.herokuapp.com/';
 	$config['base_path'] = '';
-	$config['admin_url'] = '';
-	$config['image_url'] = '';
+	$config['admin_url'] = 'https://mycrannyapp.herokuapp.com/admin';
+	$config['image_url'] = 'https://mycrannyapp.herokuapp.com/assets/uploads';
 }
 
 $config['admin_email'] =  'rutvi@anilabsinc.com';
