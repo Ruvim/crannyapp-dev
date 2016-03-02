@@ -49,20 +49,20 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | Examples:	my-controller/index	-> my_controller/index
 |		my-controller/my-method	-> my_controller/my_method
 */
-$route['default_controller'] = 'adminuser';
+$route['default_controller'] = 'adminlogin';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
 /* for admin panel - starts */
 // Login
-$route['admin'] = 'adminuser/index';
-$route['admin/login'] = 'adminuser/index';
-$route['admin/googlelogin'] = 'adminuser/googleLoginSubmit';
-$route['admin/logout'] = 'adminuser/logout';
-$route['admin/login/validate'] = 'adminuser/validateCredentials';
-$route['admin/dashboard'] = 'adminuser/dashboard';
-$route['admin/forgot'] = 'adminuser/forgot';
-$route['admin/forgot/validate'] = 'adminuser/forgot_validateCredentials';
+$route['admin'] = 'adminlogin/index';
+$route['admin/login'] = 'adminlogin/index';
+$route['admin/googlelogin'] = 'adminlogin/googleLoginSubmit';
+$route['admin/logout'] = 'adminlogin/logout';
+$route['admin/login/validate'] = 'adminlogin/validateCredentials';
+$route['admin/dashboard'] = 'adminlogin/dashboard';
+$route['admin/forgot'] = 'adminlogin/forgot';
+$route['admin/forgot/validate'] = 'adminlogin/forgot_validateCredentials';
 
 // Admin User Manage
 $route['admin/adminuser'] = 'adminuser/index';
@@ -73,10 +73,7 @@ $route['admin/adminuser/update/(.+)'] = 'adminuser/update/$1';
 $route['admin/adminuser/changestatus'] = 'adminuser/changestatus';
 $route['admin/adminuser/chagepagesize'] = 'adminuser/chagepagesize';
 $route['admin/adminuser/previewChanges'] = 'adminuser/previewChanges';
-$route['admin/adminuser/delete'] = 'adminuser/delete'; 
-$route['admin/adminuser/deleteimage'] = 'adminuser/deleteimage'; 
-$route['admin/adminuser/deleteSelected'] = 'adminuser/deleteSelected';
-$route['admin/adminuser/exportToexcel'] = 'adminuser/exportToexcel';  /// For Export
+$route['admin/adminuser/delete'] = 'adminuser/delete';
 $route['admin/adminuser/(.+)'] = 'adminuser/index/$1'; 
 
 // Setting
@@ -93,9 +90,6 @@ $route['admin/image/changestatus'] = 'image/changestatus';
 $route['admin/image/changeallstatus'] = 'image/changeallstatus'; // for selected
 $route['admin/image/chagepagesize'] = 'image/chagepagesize';
 $route['admin/image/delete'] = 'image/delete';
-$route['admin/image/deleteimage'] = 'image/deleteimage'; 
-$route['admin/image/deleteSelected'] = 'image/deleteSelected';
-$route['admin/image/exportToexcel'] = 'image/exportToexcel';  /// For Export
 $route['admin/image/(.+)'] = 'image/index/$1';
 
 

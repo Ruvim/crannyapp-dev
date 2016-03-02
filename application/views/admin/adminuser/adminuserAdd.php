@@ -1,109 +1,78 @@
-<?php if(set_value('isActive')=="1"){$isActive=1;}else if(set_value('isActive')=="0"){$isActive=0;}else{$isActive=1;}?>
-<div class="container">   
-    <div style="clear:both">
-		<?php if($messagetype == 'success'){?>
-		<div role="alert" class="alert alert-success">
-			<i class="fa fa-check"></i>
-			<?php echo $message;?>
-            <div class="close">X</div>
-		</div>
-		<?php }if($messagetype == 'error'){?>
-		<div role="alert" class="alert alert-danger">
-			<i class="fa fa-exclamation-triangle"></i>
-			<?php echo $message;?>
-            <div class="close">X</div>
-		</div>
-		<?php }?>
-	</div>  	
-	<!-- Breadcrumb -->
-	<ol class="breadcrumb">
-    	<li><a href="<?php echo $this->config->item('admin_url'); ?>/dashboard">Home</a></li>
-    	<li><a href="<?php echo $this->config->item('admin_url').'/'.$this->uri->segment(2); ?>"><?php echo ucfirst($this->uri->segment(2));?></a></li>
-    	<li class="active">Add Adminuser</li>
- 	</ol>
-    <!-- Breadcrumb -->
+	<section>
+		<div class="content-wrapper">
+			<h1><a href="<?php echo $this->config->item('admin_url'); ?>/dashboard">Home</a> >> Add <a href="<?php echo $this->config->item('admin_url').'/'.$this->uri->segment(2); ?>"><?php echo ucfirst($this->uri->segment(2));?></a>
+			</h1>
+			
+			<form class="form-horizontal" id="adminuserAdd" name="adminuserAdd" method="post" action="<?php echo $this->config->item('admin_url');?>/<?php echo $this->uri->segment(2);?>/add" enctype="multipart/form-data">
+				<?php 
+				if(set_value('isActive')=="1") 
+					{$isActive = '1';} 
+				else if(set_value('isActive')=="0") 
+					{$isActive = '0';} 
+				else
+					{$isActive = '1';}
 	
-    <div class="page-title-header">
- 	<h2 class="page-title">Add Adminuser  <!--<a class="dark-blue-button"><i class="fa fa-search"></i>View Preview</a>--></h2>
- 	<label class="infodenotes denotes"><b>*</b> Denotes Mandatory Fields</label>  
-    </div>
-	<section id="addAdminuser">        
-		<!-- row of columns -->
-      	<form class="form-horizontal" id="adminuserAdd" name="adminuserAdd" method="post" action="<?php echo $this->config->item('admin_url');?>/adminuser/add" enctype="multipart/form-data" >        	                                           
-            <div class="form-group">
-				<label for="authorname" class="col-sm-3 control-label denotes"><strong>*</strong> Name</label>
-                <div class="col-sm-7">
-                	<input type="text" class="form-control" id="authorname" name="name" value="<?php echo set_value('name'); ?>" maxlength="50" placeholder="Enter Name">
-                    <?php echo form_error('name'); ?>   
-                </div>
-            </div>
-           
-            <div class="form-group">
-                <label for="email" class="col-sm-3 control-label denotes"><strong>*</strong> Email</label>
-                <div class="col-sm-7">
-                    <input type="text" class="form-control" placeholder="Enter Email" name="email" id="email" maxlength="100" value="<?php echo set_value('email'); ?>"  />
-                    <?php echo form_error('email'); ?>  
-                </div>
-            </div>
-			 <div class="form-group">
-                <label for="password" class="col-sm-3 control-label denotes"><strong>*</strong> Password</label>
-                <div class="col-sm-7">
-                    <input type="password" class="form-control" placeholder="Enter Password" name="password" id="password" maxlength="50" value="<?php echo set_value('password'); ?>"  />
-                    <?php echo form_error('password'); ?>  
-                </div>
-            </div>
-           			
-            <div class="form-group">
-                <label class="col-sm-3 control-label"> Publish</label>
-                <div class="col-sm-7" style="height:40px;">
-                    <input type="radio" id="published-yes" name="isActive" value="1" <?php if($isActive==1) {?> checked="checked" <?php }?>>
-                    <label for="published-yes" class="radio-label"> Yes </label>
-                    <input type="radio" id="published-no" name="isActive" value="0" <?php if($isActive==0) {?> checked="checked" <?php }?>>
-                    <label for="published-no" class="radio-label"> No </label>
-                </div>
-            </div> 
-           
-            <div class="form-group">
-                <div class="col-sm-offset-3 col-sm-7">
-                	<button type="submit" class="btn btn-default dark-blue-button" id="addAuthorsButton"><i class="fa fa-save"></i>Save</button>
-                  	<a href="<?php echo $this->config->item('admin_url')."/".$this->uri->segment(2);?>" class="dark-blue-button" id="reset"><i class="fa fa-remove"></i>Cancel</a>
-                </div>
-            </div>
-		</form>                                 
-    </section>
-</div> <!-- /container -->
-
-<script>	 
- $.validator.addMethod("NumbersOnly", function(value, element) {
-        return this.optional(element) || /^[0-9\-\+\(\)]+$/i.test(value);
-	    }, "Phone must contain only numbers, + and -.");
- $.validator.addMethod("CustomEmail", function(value, element) {
-                return this.optional(element) || /^[a-zA-Z0-9._-]+@[a-zA-Z0-9-]+\.[a-zA-Z.]{2,5}$/i.test(value);
-            }, "Email Address is invalid: Please enter a valid email address.");
-$("#adminuserAdd").validate({
-	  rules :{
-		name: {required: true},
-		email:{required: true, CustomEmail:true},
-		password: {required: true,minlength:6},
-	 },			 			
-	 messages: {
-		name: {required :"Please enter user name"},	
-		email:{ required :"Please enter email address"},			
-		password:{required:"Please enter password",minlength:"Password should have at least 6 characters."},		
-	 },
-	 errorElement: "em"		 
-});	
-</script>
-<?php /*?><?php if($this->session->flashdata("flash_type") == 'success'){?>
-<div role="alert" class="alert alert-success">
-    <i class="fa fa-check"></i>
-    <?php echo $this->session->flashdata("flash_message");?>
-    <div class="close">X</div>
-</div>
-<?php }if($this->session->flashdata("flash_type") == 'error'){?>
-<div role="alert" class="alert alert-danger">
-    <i class="fa fa-exclamation-triangle"></i>
-    <?php echo $this->session->flashdata("flash_message");?>
-    <div class="close">X</div>
-</div>
-<?php }?><?php */?>
+				if(set_value('user_role')=="1") 
+					{$user_role = '1';} 
+				else if(set_value('user_role')=="2") 
+					{$user_role = '2';} 
+				else
+					{$user_role = '1';}
+				?>
+				<div class="frm">
+    				<div class="frm-row">
+						<div class="frm-col-1">
+							<label>User Name</label><input type="text" name="user_name" id="user_name" value="<?php echo set_value('user_name'); ?>" maxlength="50" />
+							<?php echo form_error('user_name'); ?>
+						</div>
+						<div class="frm-col-2"> 
+							<label>Email</label><input type="text" name="email" id="email" maxlength="100" value="<?php echo set_value('email'); ?>" />
+							<?php echo form_error('email'); ?>
+						</div>
+						<div class="clear-b"></div>
+					</div>
+					<div class="frm-row">
+						<div class="frm-col-1">
+							<label>Password</label><input type="password" name="password" id="password" maxlength="20" value="" />
+						</div>
+						<div class="frm-col-2">
+							<label>Role</label>
+							<div class="radio">
+								<label class="inline-radio"><input type="radio" class="input-radio" id="admin" name="user_role" value="1" <?php if($user_role=='1') {?> checked="checked" <?php }?>><span>Admin</span></label>
+								<label class="inline-radio"><input type="radio" class="input-radio" id="subscriber" name="user_role" value="2" <?php if($user_role=='2') {?> checked="checked" <?php }?>><span>Subscriber</span></label>
+							</div>
+						</div>
+						<?php /*?><div class="frm-col-2"><label>Status</label>
+							<div class="radio">
+								<label class="inline-radio"><input type="radio" class="input-radio" id="published-yes" name="isActive" value="1" <?php if($isActive=='1') {?> checked="checked" <?php }?>><span>Active</span></label>
+								<label class="inline-radio"><input type="radio" class="input-radio" id="published-no" name="isActive" value="0" <?php if($isActive=='0') {?> checked="checked" <?php }?>><span>Inactive</span></label>
+							</div>
+						</div><?php */?>
+						<div class="clear-b"></div>
+					</div>
+				</div>	 
+  				<div class="clear-b"></div>
+				<button class="btn" type="submit"><i class="fa fa-floppy-o"></i><span>Save</span></button>
+				<button class="btn" type="button" onclick="backtolist();"><i class="fa fa-times"></i><span>Cancel</span></button>
+			</form>
+			<div></div>    
+		</div>
+	</section>
+	<script>
+	$.validator.addMethod("CustomEmail", function(value, element) {
+		return this.optional(element) || /^[a-zA-Z0-9._-]+@[a-zA-Z0-9-]+\.[a-zA-Z.]{2,5}$/i.test(value);
+	}, "Email Address is invalid: Please enter a valid email address.");
+		
+	$("#adminuserAdd").validate({
+		ignore:":hidden",
+		rules :{
+			user_name: {required: true},
+			email: {required: true,  CustomEmail:true},				
+		},			 			
+		messages: {
+			user_name :{required :"Please enter user name"},
+			email :{required :"Please enter email"},				
+		},
+		errorElement: "em"
+	});
+	</script>

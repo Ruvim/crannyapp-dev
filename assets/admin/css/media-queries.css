@@ -1,0 +1,36 @@
+@media screen and (max-width: 1024px) and (min-width: 1000px) {
+	.mm-page, #login-wrapper, #wrapper, .page-content{border:solid 1px red;}	
+}
+@media screen and (max-width: 1000px) and (min-width: 960px) {
+	.mm-page, #login-wrapper, #wrapper, .page-login .page-content{border:solid 1px #222222;}
+}
+
+@media screen and (max-width: 960px) {
+	.mm-page, #login-wrapper, #wrapper, .page-content{border:solid 1px blue;}
+}
+
+@media screen and (max-width: 758px) {
+	.mm-page, #login-wrapper, #wrapper, .page-content{border:solid 1px green;}
+}
+
+@media screen and (max-width: 524px) {
+	footer[role="contentinfo"], hgroup{ padding-left:50px;}
+	body{ font-size:14px;}
+}
+
+
+@media only screen 
+and (min-device-width : 768px) 
+and (max-device-width : 1024px) 
+and (orientation : landscape) { /* STYLES GO HERE  ipad-landscape*/
+body{width:100% !important;}
+}
+
+@media only screen 
+and (min-device-width : 768px) 
+and (max-device-width : 1024px) 
+and (orientation : portrait) { /* STYLES GO HERE ipad-portrait*/ 
+body{width:100% !important;}
+#login-content{  min-height:700px;}
+
+}

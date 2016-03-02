@@ -20,22 +20,27 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 if($_SERVER['HTTP_HOST']=='localhost')
 {
-	$config['base_url'] = 'http://localhost/crannyapp';
-	$config['base_path'] = $_SERVER['DOCUMENT_ROOT']."/crannyapp/";
-	$config['admin_url']	= 'http://localhost/crannyapp/admin';
-	$config['image_url'] = 'http://localhost/crannyapp/assets/uploads'; //'https://s3.amazonaws.com/100stohappiness/uploads';
+	$config['base_url'] = 'http://localhost/crannyapplocal';
+	$config['base_path'] = $_SERVER['DOCUMENT_ROOT']."/crannyapplocal/";
+	$config['admin_url']	= 'http://localhost/crannyapplocal/admin';
+	$config['image_url'] = 'http://localhost/crannyapplocal/assets/uploads';
 }
 else
 {
 	$config['base_url'] = '';
 	$config['base_path'] = '';
 	$config['admin_url'] = '';
-	$config['image_url'] = ''; //'https://s3.amazonaws.com/100stohappiness/uploads/profilepictures';
+	$config['image_url'] = '';
 }
 
 $config['admin_email'] =  'rutvi@anilabsinc.com';
 $config['from_email'] =  'rutvi@anilabsinc.com';
 $config['project_name'] =  'Cranny App';
+
+$config['applicationName'] =  'CrannyApp';
+$config['developerKey'] =  'AIzaSyCWjvlJKqVvOIPlaE-OMfUrPz14ESK5N_s';
+$config['clientSecret'] =  'O80cEqoyNzAYUqJYrTM4ZAyZ';
+$config['clientId'] =  '726081332676-ce8vmntbbrbjj97sdh263qmkqd89vgh6.apps.googleusercontent.com';
 
 /*
 |--------------------------------------------------------------------------

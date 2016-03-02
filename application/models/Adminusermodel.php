@@ -212,7 +212,7 @@ class AdminUserModel extends CI_Model
 		if($search_string)  /// For Maintaining Search
 		{
 		
-			$like   = "( user_name like '%".$search_string."%' OR email like '%".$search_string."%' )";
+			$like   = "( user_name like '%".$search_string."' OR email like '%".$search_string."%' )";
 			$this->db->where($like);
 			//$this->db->like('name', $search_string);
 			//$this->db->or_like('email', $search_string);
@@ -314,7 +314,7 @@ class AdminUserModel extends CI_Model
 		$id = explode(",",$id);
 		
 		$this->db->where_in('adminuser_id',$id);
-		$this->db->delete('adminusers',$data);
+		$this->db->delete('adminusers');
 	  	
 		$report = array();
 	    $report['error'] = $this->db->error();
@@ -385,12 +385,12 @@ class AdminUserModel extends CI_Model
 	{
 	//	echo $email_id." ".$password; exit;
 		/*$this->db->where('email', $email);
-		$query = $this->db->get('adminuser');*/
+		$query = $this->db->get('adminusers');*/
 		
 		//$sql = $this->db->last_query();
 		//echo '<pre>'; print_r($sql); 
 		
-		$query = $this->db->query('SELECT AU.email FROM adminuser AS AU WHERE  AU.email="'.$email.'"');
+		$query = $this->db->query('SELECT AU.email FROM adminusers AS AU WHERE  AU.email="'.$email.'"');
 		
 		if($query->num_rows() > 0)
 		{
@@ -401,8 +401,8 @@ class AdminUserModel extends CI_Model
 	function findDuplicateName($name)
 	{
 	//	echo $email_id." ".$password; exit;
-		$this->db->where('name', $name);
-		$query = $this->db->get('adminuser');
+		$this->db->where('user_name', $name);
+		$query = $this->db->get('adminusers');
 		
 		//$sql = $this->db->last_query();
 		//echo '<pre>'; print_r($sql); 
@@ -418,7 +418,7 @@ class AdminUserModel extends CI_Model
 		$imagename = $result[0]['profile_pic'];
 		
 		$this->db->where('id', $id);
-		$this->db->update('adminuser',$data);
+		$this->db->update('adminusers',$data);
 		
 		if($imagename){
 			unlink($path.'/'.$imagename);
@@ -426,20 +426,12 @@ class AdminUserModel extends CI_Model
 		}
 	
 	}
-	public function get_operator_by_email($email)
-    {   
-	    $this->db->select('*');
-		$this->db->from('operator');
-		$this->db->where('email', $email);
-		$query = $this->db->get();
-		return $query->result_array(); 
-    }
 	/** For Update Validation For username is exist or not **/
 	function GetDuplicateName($name,$id)
 	{
-		$this->db->where('name', $name);
-		$this->db->where('id !=', $id);
-		$query = $this->db->get('adminuser');
+		$this->db->where('user_name', $name);
+		$this->db->where('adminuser_id !=', $id);
+		$query = $this->db->get('adminusers');
 		
 		if($query->num_rows() > 0)
 		{
@@ -451,9 +443,9 @@ class AdminUserModel extends CI_Model
 	{
 		/*$this->db->where('email', $email);
 		$this->db->where('id !=', $id);
-		$query = $this->db->get('adminuser');*/
+		$query = $this->db->get('adminusers');*/
 		
-		$query = $this->db->query('SELECT AU.email FROM adminuser AS AU WHERE  AU.email="'.$email.'" AND AU.id !="'.$id.'"');
+		$query = $this->db->query('SELECT AU.email FROM adminusers AS AU WHERE  AU.email="'.$email.'" AND AU.adminuser_id !="'.$id.'"');
 		
 		if($query->num_rows() > 0)
 		{
@@ -465,11 +457,10 @@ class AdminUserModel extends CI_Model
 	function getAllAdminuser()
 	{
 		$this->db->select('*');
-		$this->db->from('adminuser');
-		$this->db->where('isDelete',0);
+		$this->db->from('adminusers');
 		$query = $this->db->get();
 		
 		return $query->result_array(); 
-	}
+	}	
 }
 ?>

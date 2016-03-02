@@ -10,77 +10,113 @@ class Adminuser extends CI_Controller
 		$this->output->set_header('Cache-Control: post-check=0, pre-check=0',false);  		
 		$this->output->set_header('Pragma: no-cache');
 		$this->load->database();
-		$this->load->model('adminuserModel');
-		
-		$this->config->load('google');
-		require APPPATH .'third_party/google-api-php-client/src/Google_Client.php';
-		require APPPATH .'third_party/google-api-php-client/src/contrib/Google_PlusService.php';
-		$cache_path = $this->config->item('cache_path');
-		$GLOBALS['apiConfig']['ioFileCache_directory'] = ($cache_path == '') ? APPPATH .'cache/' : $cache_path;
-		$this->client = new Google_Client();
-		$this->client->setApplicationName($this->config->item('application_name', 'google'));
-		$this->client->setClientId($this->config->item('client_id', 'google'));
-		$this->client->setClientSecret($this->config->item('client_secret', 'google'));
-		$this->client->setRedirectUri($this->config->item('redirect_uri', 'google'));
-		$this->client->setDeveloperKey($this->config->item('api_key', 'google'));
-		$this->oauth2 = new Google_PlusService($this->client);		
+		$this->load->model('adminuserModel');		
   	}
-	
-    /**
-    * Check if the user is logged in, if he's not, 
-    * send him to the login page
-    * @return void
-    */		
-	function dashboard()
-	{
-		if($this->session->userdata('is_logged_in'))
-		{
-			$data['mainContent'] = 'admin/dashboardPage';		
-			$this->load->view('admin/includes/template', $data);	
-		}
-		else
-		{
-			redirect('admin/login');
-		}
-	}	
 	
 	function index()
 	{
-		if($this->session->userdata('is_logged_in'))
-		{			
-			$data['mainContent'] = 'admin/dashboardPage';		
-			$this->load->view('admin/includes/template', $data);
+		$search_string = $this->input->post('search_string');
+		////// Get Ascending Or Descending order From Ajax /////////
+		$order = $this->input->post('fieldName');//$this->input->post('orderType'); 
+		$order_type = $this->input->post('orderType');//$this->input->post('orderType');  
+		///////// For Check Publish Data or Not with Ajax /////
+		$srchisActive = $this->input->post('srchisActive');
+			
+		$startdate = ($this->input->post('startdate')!='') ? date("Y-m-d",strtotime($this->input->post('startdate'))) : '';
+		$enddate = ($this->input->post('enddate')!='') ? date("Y-m-d",strtotime($this->input->post('enddate'))) : '';
+		
+		$order = ($order!='') ? $order : 'adminuser_id';
+		$order_type = ($order_type!='') ? $order_type : 'desc';
+		$search_string = ($search_string!='') ? $search_string : '';
+		$srchisActive = ($srchisActive!='') ? $srchisActive : '';
+		
+		 // pagination settings
+		if($this->uri->segment(5)!='')
+		{
+			$limit = $this->uri->segment(5);
+		}
+		elseif($this->uri->segment(4)!='')
+		{
+			$limit = $this->uri->segment(4);
 		}
 		else
-		{		
-			$email_id = '';		
-			$pass ='';
-			if($this->input->cookie('remember_me')!='')
-			{
-				$email_id = $this->input->cookie('remember_me');
-			}
-			if($this->input->cookie('remember_pass')!='')
-			{
-				$pass = $this->input->cookie('remember_pass');
-			}
-			$data['email_id'] = $email_id;
-			$data['pass'] = $pass;			
-			//$this->load->view('admin/login',$data);	
-			$data['auth'] = $this->client->createAuthUrl();
-			
-			$this->load->view('admin/login',$data);	
-        }
+		{
+			$limit = $this->adminusermodel->get_pagesize('adminuser'); // new added by chirag
+		}
+		$limit = ($limit!=0) ? $limit : ''; // new added by Rutvi
+	
+		$config['per_page'] = $limit; // default 20
+		$config['pagesize'] = $limit; // new added by Rutvi
+		$config['use_page_numbers'] = TRUE;
+		$config['num_links'] = 2;		
+		$config['base_url'] = $this->config->item('admin_url').'/adminuser';
+	
+		// limit end
+		$page = $this->uri->segment(3);
+		
+		// math to get the initial record to be select in the database
+		$limit_end = ($page * $config['per_page']) - $config['per_page'];
+		if ($limit_end < 0)
+		{
+			$limit_end = 0;
+		} 
+		
+		$data['count_adminuser']= $this->adminusermodel->countAdminuser($srchisActive,$search_string, $order, $order_type, $startdate, $enddate);
+		$config['total_rows'] = $data['count_adminuser'];
+		
+		$data['adminuser'] = $this->adminusermodel->getAdminuser($srchisActive,$search_string, $order, $order_type, $config['per_page'], $limit_end, $startdate, $enddate);        
+		$this->pagination->initialize($config); //// For Pagination		
+		//echo '<pre>';print_r($data['adminuser']); exit;
+		$data['mainContent'] = 'admin/adminuser/adminuserList';		
+		$this->load->view('admin/includes/template', $data);
 
 	}  //// End Of Index Function
 	
 	public function googleLoginSubmit ()
 	{
-	    $this->input->get('code');
-    	$this->client->authenticate();
-	    $data1=$this->client->getAccessToken();
-    	$data['user'] = $this->oauth2->userinfo->get();
+	    // Include two files from google-php-client library in controller
+		include_once APPPATH . "libraries/google-api-php-client-master/src/Google/Client.php";
+		include_once APPPATH . "libraries/google-api-php-client-master/src/Google/Service/Oauth2.php";
+		
+		// Store values in variables from project created in Google Developer Console
+		$client_id = '726081332676-ce8vmntbbrbjj97sdh263qmkqd89vgh6.apps.googleusercontent.com';
+		$client_secret = 'O80cEqoyNzAYUqJYrTM4ZAyZ';
+		$redirect_uri = 'http://localhost/crannyapplocal/admin/googlelogin'; //'https://crannyapp.herokuapp.com/admin/googlelogin';
+		$simple_api_key = 'AIzaSyCWjvlJKqVvOIPlaE-OMfUrPz14ESK5N_s';
+
+		// Create Client Request to access Google API
+		$client = new Google_Client();
+		$client->setApplicationName("crannyapp");
+		$client->setClientId($client_id);
+		$client->setClientSecret($client_secret);
+		$client->setRedirectUri($redirect_uri);
+		$client->setDeveloperKey($simple_api_key);
+		$client->addScope("https://www.googleapis.com/auth/userinfo.email");
+		
+		// Send Client Request
+		$objOAuthService = new Google_Service_Oauth2($client);
+		
+		// Add Access Token to Session
+		if (isset($_GET['code'])) {
+			$client->authenticate($_GET['code']);
+			$_SESSION['access_token'] = $client->getAccessToken();
+			//header('Location: ' . filter_var($redirect_uri, FILTER_SANITIZE_URL));
+		}
+		
+		// Set Access Token to make Request
+		if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
+			$client->setAccessToken($_SESSION['access_token']);
+		}
+		
+		// Get User Data from Google and store them in $data
+		if ($client->getAccessToken()) {
+			$userData = $objOAuthService->userinfo->get();
+			$data['userData'] = $userData;
+			$_SESSION['access_token'] = $client->getAccessToken();
+		}
 	    echo "<pre>"; print_r($data);
-    	//$this->load->view('google', $data);
+    	exit;
+		//$this->load->view('google', $data);
     }
 	
 	/*** encript the password 
@@ -186,6 +222,7 @@ class Adminuser extends CI_Controller
 		            );
 		$this->session->unset_userdata($data);
         $this->session->sess_destroy();
+		unset($_SESSION['access_token']);
 		redirect('admin');
 	}
 	
@@ -269,13 +306,13 @@ class Adminuser extends CI_Controller
 
 	function add()
     {	
+		$cdate = date("Y-m-d");
 		//if save button was clicked, get the data sent via post
 		if ($this->input->server('REQUEST_METHOD') === 'POST')
 		{
-			$this->form_validation->set_rules('name', 'name', 'required');
-			$this->form_validation->set_rules('password', 'password', 'required|min_length[6]');
+			$this->form_validation->set_rules('user_name', 'user_name', 'required');
+			//$this->form_validation->set_rules('password', 'password', 'required|min_length[6]');
 			$this->form_validation->set_rules('email', 'email', 'required|valid_email');
-			//$this->form_validation->set_rules('number', 'Contact Number', 'required|max_length[15]|min_length[10]');						
 			$this->form_validation->set_error_delimiters('<br /><em class="error">', '</em>');
 			
 			if ($this->form_validation->run() == FALSE) // validation hasn't been passed
@@ -286,7 +323,7 @@ class Adminuser extends CI_Controller
 			else // passed validation proceed to post success logic
 			{
 				$is_emailExist = $this->adminuserModel->findDuplicateEmail($this->input->post('email'));
-				$is_nameExist = $this->adminuserModel->findDuplicateName($this->input->post('name'));
+				$is_nameExist = $this->adminuserModel->findDuplicateName($this->input->post('user_name'));
 				
 				if($is_emailExist)
 				{
@@ -308,7 +345,7 @@ class Adminuser extends CI_Controller
 						
 					redirect('admin/adminuser/add');   // or whatever logic needs to occur*/
 					
-					$msg= 'Name '.EXIST;
+					$msg= 'User name '.EXIST;
 					$msgtype= 'error';
 				}
 				else
@@ -317,10 +354,12 @@ class Adminuser extends CI_Controller
 					// build array for the model
 					//$encrypted_string = ENCODE($pass, ('my_random_salt'.'my_secret_password'));
 					$form_data = array(
-									'name' => set_value('name'),
+									'user_name' => set_value('user_name'),
 									'email' => $this->input->post('email'),
 									'password' => base64_encode($this->input->post('password')),
-									'isActive' => $this->input->post('isActive')
+									'user_role' => $this->input->post('user_role'),
+									'created_date' => $cdate,
+									'isActive' => '1'
 									
 								);
 								
@@ -359,17 +398,16 @@ class Adminuser extends CI_Controller
 		if ($this->input->server('REQUEST_METHOD') === 'POST')
 		{
 			//form validation
-			$this->form_validation->set_rules('name', 'name', 'required');
-			$this->form_validation->set_rules('password', 'password', 'required|min_length[6]');
+			$this->form_validation->set_rules('user_name', 'user_name', 'required');
+			//$this->form_validation->set_rules('password', 'password', 'required|min_length[6]');
 			$this->form_validation->set_rules('email', 'email', 'required|valid_email');
-			//$this->form_validation->set_rules('number', 'Contact Number', 'required|max_length[15]|min_length[10]');	
 			$this->form_validation->set_error_delimiters('<br /><em class="error">', '</em>');
 			
 			//if the form has passed through the validation
 			if ($this->form_validation->run())
 			{
 				
-				$is_nameExist = $this->adminuserModel->GetDuplicateName($this->input->post('name'),$id); // return 1 or blank
+				$is_nameExist = $this->adminuserModel->GetDuplicateName($this->input->post('user_name'),$id); // return 1 or blank
 				$is_emailExist = $this->adminuserModel->GetDuplicateEmail($this->input->post('email'),$id); // return 1 or blank
 				//echo $is_nameExist;
 				//exit;
@@ -379,7 +417,7 @@ class Adminuser extends CI_Controller
 					$this->session->set_flashdata('flash_type', 'error');
 						
 					redirect('admin/adminuser/update/'.$id);   // or whatever logic needs to occur*/
-					$msg= 'Name '.EXIST;
+					$msg= 'User name '.EXIST;
 					$msgtype= 'error';
 				}
 				else if($is_emailExist)
@@ -396,18 +434,18 @@ class Adminuser extends CI_Controller
 					
 					// build array for the model
 					$form_data = array(
-									'name' => set_value('name'),
+									'user_name' => set_value('user_name'),
 									'email' => $this->input->post('email'),
 									'password' => base64_encode($this->input->post('password')),
-									'isActive' => $this->input->post('isActive')
+									'user_role' => $this->input->post('user_role'),
+									'isActive' => '1'
 								);
 					// End Slider Image upload
 					//if the insert has returned true then we show the flash message
 					if($this->adminuserModel->setUpdatedAdminuserData($id, $form_data) == TRUE)
 					{
 						$this->session->set_flashdata('flash_message', 'User'.UPDATEMSG);
-						$this->session->set_flashdata('flash_type', 'success');
-						
+						$this->session->set_flashdata('flash_type', 'success');						
 					}
 					else
 					{

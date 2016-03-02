@@ -12,8 +12,9 @@
 	},
 	"require": {
 		"php": "^5.5.12",
-		"ext-mcrypt": "*"
-	},
+  		"ext-mcrypt": "*",
+        "google/apiclient":"^2.0.0@RC"
+	},	
 	"require-dev": {
 		"mikey179/vfsStream": "1.1.*"
 	}
