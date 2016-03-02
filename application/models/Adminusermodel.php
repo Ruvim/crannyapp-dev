@@ -195,7 +195,7 @@ class AdminUserModel extends CI_Model
 			$like   = "( user_name like '%".$search_string."%' OR email like '%".$search_string."%' )";  
 			$this->db->where($like);
 		}
-		$this->db->like('isActive', $srchisActive);  /// For Active or Inactive
+		$this->db->where('isActive', $srchisActive);  /// For Active or Inactive
 		$this->db->group_by('adminuser_id');
 		$this->db->order_by($order, $order_type);  /// For Maintain Sorting Order
 		
