@@ -196,9 +196,9 @@ class AdminUserModel extends CI_Model
 			$like   = "( user_name like '%".$search_string."%' OR email like '%".$search_string."%' )";  
 			$this->db->where($like);
 		}
-		$this->db->where('isActive', $srchisActive);  /// For Active or Inactive
+		//$this->db->where('isActive', $srchisActive);  /// For Active or Inactive
 		$this->db->group_by('adminuser_id');
-		$this->db->order_by($order, $order_type);  /// For Maintain Sorting Order
+		//$this->db->order_by($order, $order_type);  /// For Maintain Sorting Order
 		
 		$query = $this->db->get();
 		//echo $this->db->last_query();
@@ -221,10 +221,10 @@ class AdminUserModel extends CI_Model
 			//$this->db->or_like('email', $search_string);
 		}
 		
-		if($srchisActive!='') $this->db->where('isActive', $srchisActive);  /// For Active or Inactive
+		//if($srchisActive!='') $this->db->where('isActive', $srchisActive);  /// For Active or Inactive
 		$this->db->group_by('adminuser_id');
 		
-		$this->db->order_by($order, $order_type);  /// For Maintain Sorting Order
+		//$this->db->order_by($order, $order_type);  /// For Maintain Sorting Order
         
 		if($limit_start && $limit_end)
 		{

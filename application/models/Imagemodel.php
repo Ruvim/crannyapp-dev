@@ -31,7 +31,7 @@ class Imagemodel extends CI_Model {
 			$this->db->where($like);
 		}
 		
-		if($startdate)
+		/*if($startdate)
 		{
 			$this->db->where('g.created_date >=', $startdate);
 		}
@@ -41,9 +41,9 @@ class Imagemodel extends CI_Model {
 			$this->db->where('g.created_date <=', $enddate);
 		}
 				
-		if($srchisActive!='') $this->db->where('g.isActive', $srchisActive);  /// For Active or Inactive
+		if($srchisActive!='') $this->db->where('g.isActive', $srchisActive);  /// For Active or Inactive*/
 		$this->db->group_by('g.image_id');
-		$this->db->order_by($order, $order_type);  /// For Maintain Sorting Order
+		//$this->db->order_by($order, $order_type);  /// For Maintain Sorting Order
 		
 		$query = $this->db->get();
 		//echo $this->db->last_query();
@@ -67,7 +67,7 @@ class Imagemodel extends CI_Model {
 			//$this->db->or_like('email', $search_string);
 		}
 		
-		if($startdate)
+		/*if($startdate)
 		{
 			$this->db->where('g.created_date >=', $startdate);
 		}
@@ -77,9 +77,9 @@ class Imagemodel extends CI_Model {
 			$this->db->where('g.created_date <=', $enddate);
 		}
 		
-		if($srchisActive!='') $this->db->where('g.isActive', $srchisActive);  /// For Active or Inactive		
+		if($srchisActive!='') $this->db->where('g.isActive', $srchisActive);  /// For Active or Inactive		*/
 		$this->db->group_by('g.image_id');		
-		$this->db->order_by($order, $order_type);  /// For Maintain Sorting Order
+		//$this->db->order_by($order, $order_type);  /// For Maintain Sorting Order
 		        
 		if($limit_start && $limit_end)
 		{
