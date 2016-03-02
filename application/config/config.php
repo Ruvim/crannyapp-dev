@@ -18,7 +18,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 */
 
-if($_SERVER['HTTP_HOST']=='localhost')
+/*if($_SERVER['HTTP_HOST']=='localhost')
 {
 	$config['base_url'] = 'http://localhost/crannyapplocal';
 	$config['base_path'] = $_SERVER['DOCUMENT_ROOT']."/crannyapplocal/";
@@ -26,12 +26,12 @@ if($_SERVER['HTTP_HOST']=='localhost')
 	$config['image_url'] = 'http://localhost/crannyapplocal/assets/uploads';
 }
 else
-{
+{*/
 	$config['base_url'] = 'https://mycrannyapp.herokuapp.com/';
 	$config['base_path'] = $_SERVER['DOCUMENT_ROOT'].'/';
 	$config['admin_url'] = 'https://mycrannyapp.herokuapp.com/admin';
 	$config['image_url'] = 'https://mycrannyapp.herokuapp.com/assets/uploads';
-}
+//}
 
 $config['admin_email'] =  'rutvi@anilabsinc.com';
 $config['from_email'] =  'rutvi@anilabsinc.com';
